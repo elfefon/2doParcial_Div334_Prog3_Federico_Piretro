@@ -1,0 +1,291 @@
+////// consigna:
+
+Situación general: Una universidad digital gestiona carreras, materias, reglas de correlatividades y avances de los estudiantes.
+
+    Documentos actuales: 1.000 planes de estudio, 200.000 materias, 5 millones de inscripciones.
+
+    Actualizaciones por hora: 300.000.
+
+    Usuarios: 500.000 estudiantes.
+
+    Accesos concurrentes: 5.000.
+
+Pregunta:
+¿Cómo representarías la relación compleja entre materias y sus correlativas, junto con la trayectoria académica del estudiante? Justifique
+
+
+
+/////////////7 intento de mi compañero 4/6
+
+Planes (1.000 docs)
+
+{
+_id: "PLAN-2020-SIS",
+carrera: "Ingeniería en Sistemas",
+anio_vigencia 2020,
+estado: "Vigente",
+materias: ["MAT-101", "MAT-201", "MAT-301"] // referencias a Materias
+}
+Materias (200.000 docs)
+{
+id: "MAT-301",
+codigo. "301",
+io
+nombre: "Bases de Datos",
+plan_id: "PLAN-2020-SIS",
+anio: 3,
+cuatrimestre 1,
+correlativas: [
+    {materia_id: "MAT-201", codigo: "201", nombre: "Estructuras de Datos", tipo: "rendir"}
+]
+}
+Estudiantes (500.000 docs)
+
+{
+id: "EST-50123",
+legajo. "50123",
+{ estado: "Activo",
+nombre: "Pepe",
+apellido: "Gonzalez"
+plan_id: "PLAN-2020-SIS",
+avance: { // resumen para lecturas rápidas
+materias Japrobadas: ["MAT-101", "MAT-150", "MAT-201"],
+materias_en_curso: ["MAT-202"],
+cantidad aprobadas: 3,
+promedio. 8.2}
+}
+}
+Inscripciones (5.000.000 docs)
+
+{
+
+_id: ObjectId(),
+estudiante_id: "EST-50123",
+materia_id: "MAT-201",
+plan id: "PLAN-2020-SIS",
+periodo: "2025-C1",
+Libre | Abandonada
+nota: 8.
+estado: "Aprobada", // Cursando | Aprobada | Desaprobada |
+fecha inscripcion: ISODate("2025-03-15T10:00:00Z"),
+fecha_estado: ISODate("2025-07-20T10:00:00Z")
+}
+
+Modelo hibrido
+
+Correlativas
+referencias embebidas dentro de cada Materia.
+Trayectoria colección Inscripciones aparte un resumen denormalizado de
+avance dentro del Estudiante
+Es un modelo hibrido, embeber lo que se lee junto y es acotado, referenciar lo
+masivo y escrito de forma intensiva
+
+///////////////////////////////////////// gemini (resolucion para sacar 6/6 segun esta ia)
+
+planes:
+{
+  "_id": "PLAN-2020-SIS",
+  "carrera": "Ingeniería en Sistemas",
+  "anio_vigencia": 2020,
+  "estado": "Vigente"
+}
+materias:
+{
+  "_id": "MAT-301",
+  "codigo": "301",
+  "nombre": "Bases de Datos",
+  "plan_id": "PLAN-2020-SIS",
+  // CORRECCIÓN: Solo IDs para evitar anomalías de actualización
+  "correlativas_requeridas": ["MAT-201", "MAT-150"] 
+}
+estudiantes:
+{
+  "_id": "EST-50123",
+  "nombre": "Pepe",
+  "apellido": "Gonzalez",
+  "plan_id": "PLAN-2020-SIS",
+  "avance_resumen": { 
+    // Solo contadores y promedios para lectura hiper-rápida, sin arrays masivos
+    "materias_aprobadas": 15,
+    "promedio": 8.2
+  }
+}
+Inscripciones:
+{
+  "_id": ObjectId("64a1b2c3..."),
+  "estudiante_id": "EST-50123",
+  "materia_id": "MAT-201",
+  "periodo": "2025-C1",
+  "estado": "Aprobada", 
+  "nota_final": 8,
+  "fecha_actualizacion": ISODate("2025-07-20T10:00:00Z")
+}
+
+justificacion:
+Planes → Materias: se utilizan referencias, ya que un plan puede contener muchas materias y estas pueden modificarse de manera independiente sin necesidad de actualizar todo el documento del plan de estudios.
+
+Materias → Correlativas: se utiliza una matriz de referencias guardando únicamente los IDs de las materias correlativas (evitando duplicar nombres o códigos para no generar anomalías de actualización si una materia cambia de nombre). Se maneja como relación de muchos a muchos limitada porque son pocos elementos, cambian rara vez y se leen en conjunto al validar si un alumno puede cursar.
+
+Estudiantes → Avance académico: se implementa un patrón computado manteniendo un resumen embebido con los totales de materias y el promedio actualizado. Esto permite resolver los 5.000 accesos concurrentes de lectura de forma instantánea, evitando que el sistema tenga que calcular una agregación pesada sobre millones de registros cada vez que un alumno entra a su perfil.
+
+Inscripciones: se almacenan en una colección conectiva independiente (asociativa In-Between) porque representa una relación de muchos a muchos no limitada que maneja un volumen masivo de 5 millones de documentos y soporta una alta concurrencia de 300.000 actualizaciones por hora. Mantenerlas separadas evita que el documento del estudiante crezca indefinidamente hasta superar el límite físico de 16MB de MongoDB y elimina la degradación de rendimiento por bloqueos concurrentes en un mismo archivo.
+
+//////// chat (resolucion para sacar 6/6 segun esta ia)
+
+planes:
+{
+    _id: "PLAN-2020-SIS",
+    carrera: "Ingeniería en Sistemas",
+    anio_vigencia: 2020,
+    estado: "Vigente",
+
+    materias: [
+        "MAT-101",
+        "MAT-201",
+        "MAT-301"
+    ]
+}
+
+materias:
+{
+    _id: "MAT-301",
+    codigo: "301",
+    nombre: "Bases de Datos",
+
+    plan_id: "PLAN-2020-SIS",
+
+    anio: 3,
+    cuatrimestre: 1,
+
+    correlativas: [
+        {
+            materia_id: "MAT-201",
+            codigo: "201",
+            nombre: "Estructuras de Datos",
+            tipo: "Rendir"
+        }
+    ]
+}
+estudiantes:
+{
+    _id: "EST-50123",
+
+    legajo: "50123",
+
+    nombre: "Pepe",
+    apellido: "González",
+
+    plan_id: "PLAN-2020-SIS",
+
+    avance:{
+
+        materias_aprobadas:[
+            "MAT-101",
+            "MAT-150",
+            "MAT-201"
+        ],
+
+        materias_en_curso:[
+            "MAT-202"
+        ],
+
+        cantidad_aprobadas:3,
+
+        promedio:8.2
+    }
+}
+Inscripciones:
+{
+    _id:ObjectId(),
+
+    estudiante_id:"EST-50123",
+
+    materia_id:"MAT-201",
+
+    plan_id:"PLAN-2020-SIS",
+
+    periodo:"2025-C1",
+
+    estado:"Aprobada",
+
+    nota:8,
+
+    fecha_inscripcion:ISODate("2025-03-15"),
+
+    fecha_estado:ISODate("2025-07-20")
+}
+justificacion:
+
+Planes → Materias: se utilizan referencias, ya que un plan puede contener muchas materias y estas pueden modificarse sin necesidad de actualizar todo el documento del plan.
+Materias → Correlativas: las correlativas se embeben dentro de cada materia porque son pocas, cambian muy poco y siempre se consultan junto con la información de la materia al validar inscripciones.
+Estudiantes → Avance académico: se mantiene un resumen embebido con materias aprobadas, materias en curso, cantidad de materias aprobadas y promedio. Esto permite consultar rápidamente el estado académico del estudiante sin recorrer todas sus inscripciones.
+Inscripciones: se almacenan en una colección independiente porque existen aproximadamente 5 millones de documentos y el sistema registra 300.000 actualizaciones por hora. Mantenerlas separadas evita que el documento del estudiante crezca indefinidamente y mejora el rendimiento de escritura.
+
+
+db.prestamos.aggregate([
+
+{
+$match:{
+fecha_prestamo:{
+$gte:new Date(new Date().setFullYear(new Date().getFullYear()-5))
+}
+}
+},
+
+{
+$group:{
+_id:"$libro_id",
+cantidad_prestamos:{
+$sum:1
+}
+}
+},
+
+{
+$lookup:{
+from:"libros",
+localField:"_id",
+foreignField:"_id",
+as:"libro"
+}
+},
+
+{
+$unwind:"$libro"
+},
+
+{
+$unwind:"$libro.genero"
+},
+
+{
+$sort:{
+cantidad_prestamos:-1
+}
+},
+
+{
+$group:{
+_id:"$libro.genero",
+libros:{
+$push:{
+libro:"$libro",
+cantidad_prestamos:"$cantidad_prestamos"
+}
+}
+}
+},
+
+{
+$project:{
+_id:0,
+genero:"$_id",
+libros:{
+$slice:["$libros",3]
+}
+}
+}
+
+])
+
+

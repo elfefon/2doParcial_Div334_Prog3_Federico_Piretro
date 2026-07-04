@@ -1,0 +1,143 @@
+:root {
+    --msg-error-bg: #f8d7da;
+    --msg-error-color: #58151c;
+    --msg-error-border: #f1aeb5;
+    --msg-exito-bg: #d1e7dd;
+    --msg-exito-color: #0a3622;
+    --msg-exito-border: #a3cfbb;
+}
+
+
+ul {
+    list-style-type: none;
+}
+
+header {
+    height: 80px;
+}
+
+header, .enlaces {
+    display: flex;
+    /* border: 1px solid; */
+    justify-content: space-between;
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
+    margin: auto;
+}
+
+.logo img {
+    border-radius: 5px;
+}
+
+.enlaces {
+    width: 85%;
+    margin-bottom: 0;
+    align-items: center;
+}
+
+
+/* Contenedores producto */
+.card-producto {
+    display: flex;
+    width: 170px;
+    font-size: 10px;
+    flex-direction: column;
+    align-items: center;
+    height: 170px;
+    justify-content: space-between;
+    background-color: ghostwhite;
+    color: black;
+    margin-bottom: 25px;
+    border-radius: 5px;
+    border: 3px solid #eb99a1;
+    padding: 10px;
+}
+
+.card-producto img {
+    width: 70px;
+    max-height: 75px;
+}
+
+.card-producto h4, .card-producto p {
+    margin: 0;
+}
+
+.card-producto h4 {
+    font-size: 12px;
+}
+
+#contenedor-productos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+#contenedor-productos ul {
+    margin-top: 20px;
+    width: 100%;
+    /* border: 1px solid; */
+    padding-left: 0;
+}
+
+.lista-producto {
+    display: flex;
+    align-items: center;
+    /* border: 1px solid; */
+    width: 100%;
+    justify-content: space-around;
+}
+
+.lista-producto img {
+    width: 70px;
+    border-radius: 5px;
+}
+
+.lista-producto p {
+    font-size: 14px;
+}
+
+.lista-producto img, .lista-producto p {
+    margin-bottom: 0;
+}
+
+.form-alta {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+}
+
+#deleteProduct-button {
+    margin-bottom: 0;
+}
+
+.mensaje {
+    border-radius: 6px;
+    margin-top: 20px;
+    padding: 15px;
+    width: 100%;
+    text-align: center;
+}
+
+.mensaje-error {
+    color: var(--msg-error-color);
+    background-color: var(--msg-error-bg);
+    border: 1px solid var(--msg-error-border);
+}
+
+.mensaje-exito {
+    color: var(--msg-exito-color);
+    background-color: var(--msg-exito-bg);
+    border: 1px solid var(--msg-exito-border);
+}
+
+.texto-login {
+    text-align: center;
+    margin-bottom: 40px;
+} 
+
+#loginForm {
+    margin: 0 auto;
+}
