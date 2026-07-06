@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CU</title>
+    <title>Remeras Deportivas</title>
     <!-- CDN para usar jsPDF -->
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
 
@@ -11,23 +11,28 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mynerve&display=swap" rel="stylesheet">
-    <link rel="shortcut icon" href="src/img/logoPagina.webp" type="image/x-icon">
+    <link rel="shortcut icon" href="src/img/favicon.ico" type="image/x-icon">
     <script defer src="js/main.js"></script>
 </head>
 <body>
 
-    <header>
-        <div class="logo-container">
-            <img src="src/img/logoPagina.webp" class="logo-img" alt="Camiseta de collecion">
-        </div>
+    <header class="header-productos">
         <!-- Navbar -->
-        <nav class="navbar">
-            <div class="logo">
-                <a href="" class="mynerve-regular">Camisetas de coleccion</a>
+        <nav class="navbar-productos">
+
+            <div class="logo-container">
+                <img src="src/img/logoPaginaPelota.jpg" class="logo-img" alt="Logo Pelota">
             </div>
-    
-            <input type="text" placeholder="Buscar..." class="search-bar">
-    
+
+            <div class="logo">
+                <a href="" class="mynerve-regular">Remeras deportivas</a>
+            </div>
+
+            <div class="search-container">
+                <button id="search-toggle" class="search-btn">🔍</button>
+                
+                <input type="text" id="search-input" placeholder="Buscar..." class="search-bar hidden">
+            </div>
             <div class="cart">
                 <span>Carrito: <span id="cart-count">0</span> productos</span>
             </div>
@@ -40,7 +45,7 @@
         <section class="products-section">
             <div id="products-welcome">
                 <h2 id="saludo-usuario"></h2>
-                <h2>No te pierdas nuestras camisetas exclusivas!</h2>
+                <h2>No te pierdas nuestras remeras exclusivas!</h2>
             </div>
             <div class="product-grid"></div>
         </section>

@@ -96,6 +96,41 @@ h1 {
     Pagina productos
 ===============================*/
 
+/* Ocultamos el buscador por defecto */
+.search-bar.hidden {
+    display: none;
+    visibility: hidden;
+}
+
+/* Estilo para que el botón de lupa no se vea como un botón feo */
+.search-btn {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Cuando el buscador está visible */
+.search-bar {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    position: absolute; /* Para que se abra encima de otros elementos */
+    right: 150px; /* Ajustalo según donde quieras que aparezca */
+    top: 60px;
+    transition: opacity 0.3s ease, visibility 0.3s;
+    opacity: 1;
+    visibility: visible;
+}
+
+.header-productos {
+  width: 100%; /* Forzamos a que el contenedor principal ocupe todo el ancho */
+  margin: 0;
+  padding: 0;
+}
+
 #products-welcome {
   display: flex;
   flex-direction: column;
@@ -106,23 +141,56 @@ h1 {
   margin: 0;
 }
 
-nav {
-  width: 85%;
-  background-color: #ff8732;
-  color: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
+.navbar-productos {
+ 
+  background-image: url('/front/src/img/fondoNavBar.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 20px 0; 
+  border-bottom: 3px solid #bfa15f; 
+  display: flex; /* Ponemos todos los elementos en fila */
+  justify-content: space-between; /* Empuja los bloques equitativamente: logo a la izquierda, carrito a la derecha */
+  align-items: center; /* Centra el logo, la barra de búsqueda y el carrito verticalmente */
+  width: 100%; /* El nav toma todo el ancho del header */
+  box-sizing: border-box; /* Evita que los paddings rompan el ancho de la pantalla */
+  
+  
+  /* El truco del padding: le da el alto suficiente arriba y abajo para que se luzca el relieve de la piedra */
+  padding: 20px 40px; 
+  border-bottom: 4px solid #bfa15f; /* Tu sutil cierre dorado mundialista */
+}
+
+
+
+.navbar-productos a,
+.cart{
+    color: #ffffff; /* Texto blanco */
+    font-weight: bold;
+    text-decoration: none;
+    text-transform: uppercase;
+    
+    /* El truco maestro: una sombra negra al texto para que resalte sobre el relieve de la piedra */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    
+    transition: color 0.3s ease;
+}
+
+/* El efecto Hover para cuando pasas el mouse por arriba */
+.navbar-productos a:hover,
+.cart:hover {
+    color: #ffd700;
+    cursor: pointer;
 }
 
 .logo {
   font-size: 1.5rem;
+  color: green;
 }
 
 .logo-container {
   width: 15%;
-  background-color: #f8f1e1;
+  background-color: transparent;
   display: flex;
   justify-content: center;
 }

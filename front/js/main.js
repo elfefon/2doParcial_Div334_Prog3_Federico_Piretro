@@ -7,7 +7,32 @@ if(!nombreUsuario){
 }
 
 
+const searchToggle = document.getElementById("search-toggle");
+const searchInput = document.getElementById("search-input");
 
+searchToggle.addEventListener("click", () => {
+    // Si tiene la clase hidden, se la sacamos (se muestra), si no, se la ponemos (se oculta)
+    searchInput.classList.toggle("hidden");
+    
+    // Opcional: que el cursor se posicione solo en el input cuando se abre
+    if (!searchInput.classList.contains("hidden")) {
+        searchInput.focus();
+    }
+});
+
+// Escuchamos clics en todo el documento
+document.addEventListener("click", (event) => {
+    const searchInput = document.getElementById("search-input");
+    const searchToggle = document.getElementById("search-toggle");
+
+    // Verificamos si el clic NO ocurrió dentro del input Y tampoco en el botón de la lupa
+    if (!searchInput.contains(event.target) && !searchToggle.contains(event.target)) {
+        // Si el buscador está visible, lo ocultamos
+        if (!searchInput.classList.contains("hidden")) {
+            searchInput.classList.add("hidden");
+        }
+    }
+});
 
 // Variables////////////////////////////////
 let productos = []; // Agregamos la variable global productos
