@@ -8,6 +8,7 @@ import { loggerURL } from "./src/api/middlewares/middlewares.js";
 import { authRoutes, productRoutes, viewRoutes } from "./src/api/routes/index.js";
 import { join, __dirname } from "./src/api/utils/index.js";
 import session from "express-session";
+import { destroySession } from "./src/api/controllers/auth.controllers.js";
 
 
 ///////////
@@ -46,6 +47,12 @@ app.use(session({
     saveUninitialized: true // No guarda sesiones vacias
 }));
 
+// Middleware para disponibilizar el usuario de la sesion en todas las vistas
+app.use((req, res, next) => {
+    res.locals.user = req.session.user;
+    next();
+});
+
 
 /////////////
 // Rutas
@@ -55,6 +62,9 @@ app.use("/login", authRoutes);
 /*
 app.use("/api/users", rutasUsuario);
 */
+
+// Ruta para cerrar sesion
+app.get("/logout", destroySession);
 
 
 app.listen(PORT, () => {

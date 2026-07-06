@@ -212,3 +212,48 @@ header {
     background-color: var(--msg-exito-bg);
     border: 1px solid var(--msg-exito-border);
 }
+
+/*==============================
+    Toggle Login/Registro 
+===============================*/
+.toggle-form {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.toggle-form a {
+    color: var(--color-dorado);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.toggle-form a:hover {
+    color: var(--color-hover);
+    text-decoration: underline;
+}
+
+/*==============================
+    Informacion de usuario (nav)
+===============================*/
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: white;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.btn-logout {
+    color: white;
+    text-decoration: none;
+    padding: 6px 12px;
+    border: 1px solid white;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    transition: background 0.3s ease;
+}
+
+.btn-logout:hover {
+    background: rgba(255, 255, 255, 0.2);
+}

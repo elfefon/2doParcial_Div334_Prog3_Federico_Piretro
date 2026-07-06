@@ -36,4 +36,11 @@
             </a>
         </li>
     </ul>
+
+    <div class="user-info">
+        <% if (typeof user !== "undefined" && user) { %>
+            <span><%= user.nombre %></span>
+            <a href="/logout" class="btn-logout">Cerrar sesión</a>
+        <% } %>
+    </div>
 </header>
