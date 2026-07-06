@@ -240,7 +240,7 @@ h1 {
   align-items: center;
   justify-content: space-between;
   background-color: white;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  box-shadow: 0 4px 8px 0 #bfa15f, 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 5px;
   border: 4px solid transparent;
 }
@@ -267,7 +267,7 @@ h1 {
 }
 
 .product-card button, .orange-btn {
-  background-color: #ff8732;
+  background-color: #bfa15f;;
   color: white;
   padding: 10px;
   border-radius: 5px;
@@ -277,8 +277,8 @@ h1 {
 
 .product-card button:hover {
   background-color: white;
-  color: #ff8732;
-  border: 2px solid #ff8732;
+  color: #bfa15f;
+  border: 2px solid #bfa15f;;
 }
 
 /* Cart Section */
