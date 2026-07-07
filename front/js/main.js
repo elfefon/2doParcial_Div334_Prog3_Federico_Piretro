@@ -64,6 +64,8 @@ async function obtenerProductos() {
 
         productos = data.payload;
 
+        productos.sort((a, b) => (b.active || 0) - (a.active || 0));
+
         mostrarProductos(productos);
 
     } catch(error) {
@@ -78,13 +80,17 @@ function mostrarProductos(array) {
     let cartaProducto = "";
 
     for(let i = 0; i < array.length; i++) {
+        const inactivo = array[i].active == 0;
         cartaProducto += `
-            <div class="product-card">
+            <div class="product-card${inactivo ? ' disabled' : ''}">
                 <img src="${array[i].image}" alt="${array[i].name}">
                 <h3>${array[i].name}</h3>
                 <p>$${array[i].price}</p>
                 <p class="product-category">${array[i].category}</p>
-                <button class="add-to-cart" onclick="agregarCarrito(${array[i].id})">Agregar a carrito</button>
+                ${inactivo
+                    ? '<p class="badge-inactivo">INACTIVO</p>'
+                    : `<button class="add-to-cart" onclick="agregarCarrito(${array[i].id})">Agregar a carrito</button>`
+                }
             </div>
         `;
     }

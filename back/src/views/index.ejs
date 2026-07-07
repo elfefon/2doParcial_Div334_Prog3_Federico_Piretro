@@ -5,17 +5,38 @@
 
         <section class="secccion-productos">
             <h2> <%=  about %></h2>
+
+            <div class="admin-filters">
+                <div class="filter-row">
+                    <button class="admin-filter-btn active" data-filter="categoria" data-value="todas">Todas</button>
+                    <button class="admin-filter-btn" data-filter="categoria" data-value="local">Local</button>
+                    <button class="admin-filter-btn" data-filter="categoria" data-value="visitante">Visitante</button>
+                </div>
+                <div class="filter-row">
+                    <button class="admin-filter-btn active" data-filter="estado" data-value="todos">Todos</button>
+                    <button class="admin-filter-btn" data-filter="estado" data-value="activos">Activos</button>
+                    <button class="admin-filter-btn" data-filter="estado" data-value="inactivos">Inactivos</button>
+                </div>
+            </div>
+
             <div id="contenedor-productos">
-                
-                <!-- Recibimos el array de productos directamente en la plantilla para iterarlo -->
 
-                <% productsArray.forEach(producto => { %>
+                <% 
+                const sorted = [...productsArray].sort((a, b) => (b.active || 0) - (a.active || 0));
+                sorted.forEach(producto => { 
+                const inactivo = (producto.active == 0);
+                %>
 
-                    <div class="card-producto">
+                    <div class="card-producto<%= inactivo ? ' disabled' : '' %>"
+                         data-categoria="<%= producto.category %>"
+                         data-active="<%= producto.active %>">
                         <img src="<%= producto.image %>" alt="<%= producto.name %>">
                         <h4><%= producto.name %></h4>
                         <p>Id: <%= producto.id %></p>
                         <p>$<%= producto.price %></p>
+                        <% if (inactivo) { %>
+                            <p class="badge-inactivo">INACTIVO</p>
+                        <% } %>
                     </div>
 
                 <% }) %>
@@ -23,5 +44,40 @@
             </div>
         </section>
     </main>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const cards = document.querySelectorAll(".card-producto");
+    const filtros = document.querySelectorAll(".admin-filter-btn");
+
+    function aplicarFiltros() {
+        const catActivo = document.querySelector('.admin-filter-btn.active[data-filter="categoria"]');
+        const estActivo = document.querySelector('.admin-filter-btn.active[data-filter="estado"]');
+        const catVal = catActivo ? catActivo.dataset.value : "todas";
+        const estVal = estActivo ? estActivo.dataset.value : "todos";
+
+        cards.forEach(card => {
+            const cat = card.dataset.categoria;
+            const active = card.dataset.active;
+
+            const porCategoria = catVal === "todas" || cat === catVal;
+            const porEstado = estVal === "todos"
+                || (estVal === "activos" && active == 1)
+                || (estVal === "inactivos" && active == 0);
+
+            card.style.display = porCategoria && porEstado ? "" : "none";
+        });
+    }
+
+    filtros.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const grupo = btn.dataset.filter;
+            document.querySelectorAll(`.admin-filter-btn[data-filter="${grupo}"]`).forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            aplicarFiltros();
+        });
+    });
+});
+</script>
 
 <%- include("partials/footer.ejs") %>

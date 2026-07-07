@@ -65,11 +65,13 @@ function mostrarExito(mensaje) {
 }
 
 function renderizarProducto(producto) {
+    const inactivo = producto.active == 0;
     let htmlProducto = `
     <ul>
-        <li class="lista-producto">
+        <li class="lista-producto${inactivo ? ' inactivo' : ''}">
             <img src="${producto.image}" alt="${producto.name}">
             <p>Id: ${producto.id} / Nombre: ${producto.name} / <strong>Precio: $${producto.price}</strong></p>
+            ${inactivo ? '<p class="badge-inactivo">INACTIVO</p>' : ''}
             <input type="button" id="updateProduct-button" value="Actualizar Producto">
         </li>
     </ul>

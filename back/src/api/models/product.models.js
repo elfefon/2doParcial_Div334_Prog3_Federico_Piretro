@@ -7,12 +7,12 @@ import connection from "../database/db.js";
 ///////////////////////////////
 // Traer todos los productos
 const selectAllProducts = () => {
-    const sql = "SELECT id, name, price, image, category FROM products";
+    const sql = "SELECT id, name, price, image, category, active FROM products";
     return connection.query(sql);
 }
 
 const selectProductById = (id) => {
-    const sql = "SELECT id, name, price, image, category FROM products where products.id = ?";
+    const sql = "SELECT id, name, price, image, category, active FROM products where products.id = ?";
     return connection.query(sql, [id]);
 }
 

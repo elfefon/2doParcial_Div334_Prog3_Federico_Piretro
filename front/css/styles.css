@@ -482,3 +482,47 @@ h4 {
   text-align: center;
   color: var(--text-primary);
 }
+
+/*==============================
+    Productos inactivos
+===============================*/
+.product-card.disabled {
+    position: relative;
+    opacity: 0.6;
+    border-color: #999 !important;
+    pointer-events: none;
+}
+
+.product-card.disabled::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 8px,
+            rgba(150, 150, 150, 0.3) 8px,
+            rgba(150, 150, 150, 0.3) 16px
+        ),
+        repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 8px,
+            rgba(150, 150, 150, 0.3) 8px,
+            rgba(150, 150, 150, 0.3) 16px
+        );
+    border-radius: 5px;
+    pointer-events: none;
+}
+
+.badge-inactivo {
+    color: #999;
+    font-weight: bold;
+    font-size: 0.85rem;
+    border: 1px solid #999;
+    padding: 2px 8px;
+    border-radius: 3px;
+    display: inline-block;
+    margin: 5px 0;
+}
