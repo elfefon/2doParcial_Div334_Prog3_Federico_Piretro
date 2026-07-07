@@ -9,11 +9,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="src/img/favicon.ico" type="image/x-icon">
+    <script>
+        (function() {
+            if (localStorage.getItem("theme") === "dark") {
+                document.documentElement.setAttribute("data-theme", "dark");
+            }
+        })();
+    </script>
 </head>
 <body class="pagina-bienvenida">
     <header class="header-bienvenida">
         <img src="src/img/logoPaginaPelota.jpg" class="logo-img" alt="Remera deportiva">
         <h2>Remeras deportivas</h2>
+        <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">☾</button>
     </header>
 
     <main class="main-bienvenida">
@@ -42,6 +50,30 @@
                 window.location.href = "productos.html";
             }
         })
+    </script>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const btn = document.querySelector(".theme-toggle");
+            if (html.getAttribute("data-theme") === "dark") {
+                html.removeAttribute("data-theme");
+                localStorage.setItem("theme", "light");
+                btn.textContent = "\\u263E";
+            } else {
+                html.setAttribute("data-theme", "dark");
+                localStorage.setItem("theme", "dark");
+                btn.textContent = "\\u2600";
+            }
+        }
+        (function() {
+            const btn = document.querySelector(".theme-toggle");
+            if (document.documentElement.getAttribute("data-theme") === "dark") {
+                btn.textContent = "\\u2600";
+            } else {
+                btn.textContent = "\\u263E";
+            }
+        })();
     </script>
 </body>
 </html>

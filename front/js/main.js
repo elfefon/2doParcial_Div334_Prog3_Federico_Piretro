@@ -34,30 +34,35 @@ document.addEventListener("click", (event) => {
 });
 
 // Variables////////////////////////////////
-let productos = []; // Agregamos la variable global productos
+let productos = [];
 let cuadriculaProductos = document.querySelector(".product-grid");
 let barraBusqueda = document.querySelector(".search-bar");
 
 let contadorCarrito = document.getElementById("cart-count");
 
 // El carrito vive en sessionStorage para compartirse entre productos.html y carrito.html
+// Normalizamos items viejos (sin cantidad) a formato con cantidad
 let carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
+carrito = carrito.map(item => typeof item.cantidad === "number" ? item : { ...item, cantidad: 1 });
+sessionStorage.setItem("carrito", JSON.stringify(carrito));
+
+let categoriaActual = "todas";
 
 
 
 
 // Obtener productos////////////////////////////////////////////
-const url = "http://localhost:3000/api/products"; // Guardamos en una variable la url de nuestro endpoint
+const url = "http://localhost:3000/api/products";
 
 async function obtenerProductos() {
     try {
-        let respuesta = await fetch(url); // Hacemos una peticion a nuestro nuevo endpoint en http://localhost:3000/api/products
+        let respuesta = await fetch(url);
 
         let data = await respuesta.json();
 
-        console.log(data); // Nuestros productos estan disponibles dentro de payload { payload: Array(19) }
+        console.log(data);
 
-        productos = data.payload; // Aca guardamos en la variable productos el array de productos que contiene "payload"
+        productos = data.payload;
 
         mostrarProductos(productos);
 
@@ -65,7 +70,6 @@ async function obtenerProductos() {
         console.error(error);
     }
 }
-
 
 
 
@@ -79,13 +83,13 @@ function mostrarProductos(array) {
                 <img src="${array[i].image}" alt="${array[i].name}">
                 <h3>${array[i].name}</h3>
                 <p>$${array[i].price}</p>
+                <p class="product-category">${array[i].category}</p>
                 <button class="add-to-cart" onclick="agregarCarrito(${array[i].id})">Agregar a carrito</button>
             </div>
         `;
     }
     cuadriculaProductos.innerHTML = cartaProducto;
 }
-
 
 
 
@@ -97,38 +101,61 @@ function saludarUsuario() {
 
 
 
-
-// Actualiza solo el contador del navbar (el detalle del carrito vive en carrito.html)
+// Actualiza contador del navbar con la suma de cantidades
 function actualizarContadorCarrito() {
-    contadorCarrito.innerHTML = carrito.length;
+    let total = carrito.reduce((sum, item) => sum + (item.cantidad || 1), 0);
+    contadorCarrito.innerHTML = total;
 }
 
 
 
-
-// Filtrar productos////////////////////////////////
+// Filtrar por nombre////////////////////////////////
 barraBusqueda.addEventListener("keyup", filtrarProductos);
 
 function filtrarProductos() {
 	let valorBusqueda = barraBusqueda.value;
 
 	let productosFiltrados = productos.filter((producto) => {
-		return producto.name.includes(valorBusqueda);
+		return producto.name.toLowerCase().includes(valorBusqueda.toLowerCase());
 	});
 	mostrarProductos(productosFiltrados);
 }
 
 
 
+// Filtrar por categoria////////////////////////////////
+function filtrarCategoria(categoria) {
+    categoriaActual = categoria;
 
-// Agregar a carrito////////////////////////////////
+    document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.categoria === categoria);
+    });
+
+    let filtrados = categoria === "todas"
+        ? productos
+        : productos.filter(p => p.category === categoria);
+
+    let valorBusqueda = barraBusqueda.value.toLowerCase();
+    if (valorBusqueda) {
+        filtrados = filtrados.filter(p => p.name.toLowerCase().includes(valorBusqueda));
+    }
+
+    mostrarProductos(filtrados);
+}
+
+
+
+// Agregar a carrito con cantidad////////////////////////////////
 function agregarCarrito(id) {
-	let productoSeleccionado = productos.find(producto => producto.id === id);
-	carrito.push(productoSeleccionado);
+	let existente = carrito.find(item => item.id === id);
+    if (existente) {
+        existente.cantidad = (existente.cantidad || 1) + 1;
+    } else {
+        let producto = productos.find(p => p.id === id);
+        carrito.push({ ...producto, cantidad: 1 });
+    }
 
-	// Persistimos el carrito para que carrito.html lo pueda leer
 	sessionStorage.setItem("carrito", JSON.stringify(carrito));
-
 	actualizarContadorCarrito();
 }
 

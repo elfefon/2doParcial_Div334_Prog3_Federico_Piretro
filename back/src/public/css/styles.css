@@ -8,10 +8,28 @@
     --msg-exito-bg: #d1e7dd;
     --msg-exito-color: #0a3622;
     --msg-exito-border: #a3cfbb;
-    
-    /* Variables traídas del front */
+
     --color-dorado: #bfa15f;
     --color-hover: #ffd700;
+
+    --bg-body: ghostwhite;
+    --bg-card: white;
+    --text-primary: #333333;
+    --text-card: black;
+    --border-color: var(--color-dorado);
+    --card-shadow: 0 4px 8px 0 var(--color-dorado), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    --form-bg: white;
+}
+
+[data-theme="dark"] {
+    --bg-body: #1a1a2e;
+    --bg-card: #16213e;
+    --text-primary: #e0e0e0;
+    --text-card: #e0e0e0;
+    --border-color: #444;
+    --color-dorado: #c9a84c;
+    --card-shadow: 0 4px 8px 0 rgba(0,0,0,0.5), 0 6px 20px 0 rgba(0,0,0,0.3);
+    --form-bg: #16213e;
 }
 
 
@@ -20,14 +38,16 @@ body {
     margin: 0 ;
     padding: 0 ;
     box-sizing: border-box ;
-    background-color: ghostwhite ;
+    background-color: var(--bg-body) ;
     max-width: 100% ; 
     width: 100% ;
-    min-height: 100vh ; 
+    min-height: 100vh ;
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h2 {
-    color: #333333; 
+    color: var(--text-primary); 
     text-align: center;
     margin-top: 20px;
 }
@@ -42,7 +62,7 @@ ul {
     Header y Navegación 
 ===============================*/
 header {
-    background-image: url('/assets/img/fondoNavBar.jpg'); /* Verificá que esta ruta funcione en tu back */
+    background-image: url('/assets/img/fondoNavBar.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -67,7 +87,7 @@ header {
 }
 
 .enlaces {
-    width: 85%;
+    width: 70%;
     margin-bottom: 0;
     display: flex;
     justify-content: space-between;
@@ -89,6 +109,31 @@ header {
 }
 
 /*==============================
+    Boton de tema (admin)
+===============================*/
+.admin-theme-toggle {
+    background: transparent;
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.admin-theme-toggle:hover {
+    transform: scale(1.15);
+    border-color: var(--color-hover);
+}
+
+/*==============================
     Tarjetas de Producto 
 ===============================*/
 .card-producto {
@@ -97,14 +142,14 @@ header {
     align-items: center;
     justify-content: space-between;
     width: 200px;
-    background-color: white;
-    color: black;
+    background-color: var(--bg-card);
+    color: var(--text-card);
     margin-bottom: 25px;
     padding: 10px;
-    box-shadow: 0 4px 8px 0 var(--color-dorado), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: var(--card-shadow);
     border-radius: 5px;
     border: 4px solid transparent;
-    transition: border 0.3s ease;
+    transition: border 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card-producto:hover {
@@ -121,11 +166,13 @@ header {
 .card-producto h4 {
     font-size: 1.2rem;
     margin: 10px 0;
+    color: var(--text-card);
 }
 
 .card-producto p {
     font-size: 1rem;
     margin: 0;
+    color: var(--text-card);
 }
 
 /*==============================
@@ -134,11 +181,11 @@ header {
 #contenedor-productos {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* Centra las tarjetas si sobra espacio */
-    gap: 20px;               /* Crea un espacio parejo entre cada tarjeta */
-    width: 100%;             /* Fuerza a ocupar todo el ancho disponible */
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
     padding: 20px;
-    box-sizing: border-box;  /* Evita que el padding sume pixeles extra y rompa el ancho */
+    box-sizing: border-box;
 }
 
 #contenedor-productos ul {
@@ -162,6 +209,7 @@ header {
 .lista-producto p {
     font-size: 14px;
     margin-bottom: 0;
+    color: var(--text-primary);
 }
 
 /*==============================
@@ -172,6 +220,14 @@ header {
     flex-direction: column;
     width: 45%;
     margin: 0 auto;
+}
+
+.form-alta input,
+.form-alta select {
+    background-color: var(--form-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #deleteProduct-button {
@@ -187,6 +243,7 @@ header {
 .texto-login {
     text-align: center;
     margin-bottom: 40px;
+    color: var(--text-primary);
 } 
 
 #loginForm {

@@ -5,7 +5,7 @@ import express from "express";
 import environments from "./src/api/config/environments.js";
 import cors from "cors";
 import { loggerURL } from "./src/api/middlewares/middlewares.js";
-import { authRoutes, productRoutes, viewRoutes } from "./src/api/routes/index.js";
+import { authRoutes, productRoutes, purchaseRoutes, viewRoutes } from "./src/api/routes/index.js";
 import { join, __dirname } from "./src/api/utils/index.js";
 import session from "express-session";
 import { destroySession } from "./src/api/controllers/auth.controllers.js";
@@ -57,6 +57,7 @@ app.use((req, res, next) => {
 /////////////
 // Rutas
 app.use("/api/products", productRoutes);
+app.use("/api/purchases", purchaseRoutes);
 app.use("/dashboard", viewRoutes);
 app.use("/login", authRoutes);
 /*

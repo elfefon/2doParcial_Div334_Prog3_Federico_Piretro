@@ -1,5 +1,65 @@
+/*==============================
+    Tema claro (por defecto)
+===============================*/
+:root {
+    --bg-body: ghostwhite;
+    --bg-welcome: #ff8732;
+    --bg-header-welcome: #f8f1e2;
+    --bg-card: white;
+    --bg-cart-section: #f8f9fa;
+    --bg-filter-btn: white;
+    --text-primary: #333;
+    --text-secondary: #888;
+    --text-on-dorado: white;
+    --border-color: #ccc;
+    --color-dorado: #bfa15f;
+    --color-hover: #ffd700;
+    --card-shadow: 0 4px 8px 0 var(--color-dorado), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
 
+/*==============================
+    Tema oscuro
+===============================*/
+[data-theme="dark"] {
+    --bg-body: #1a1a2e;
+    --bg-welcome: #16213e;
+    --bg-header-welcome: #0f3460;
+    --bg-card: #16213e;
+    --bg-cart-section: #0f3460;
+    --bg-filter-btn: #16213e;
+    --text-primary: #e0e0e0;
+    --text-secondary: #aaa;
+    --text-on-dorado: #e0e0e0;
+    --border-color: #444;
+    --color-dorado: #c9a84c;
+    --color-hover: #ffd700;
+    --card-shadow: 0 4px 8px 0 rgba(0,0,0,0.5), 0 6px 20px 0 rgba(0,0,0,0.3);
+}
 
+/*==============================
+    Boton de tema
+===============================*/
+.theme-toggle {
+    background: transparent;
+    border: 2px solid white;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    margin-left: 10px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.15);
+    border-color: var(--color-hover);
+}
 
 /*==============================
     Estilos genericos
@@ -9,8 +69,10 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: ghostwhite;
+  background-color: var(--bg-body);
   font-family: "Mynerve";
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 input, button {
@@ -20,6 +82,7 @@ input, button {
 h2 {
   text-align: center;
   margin-top: 20px;
+  color: var(--text-primary);
 }
 
 header {
@@ -43,6 +106,11 @@ body {
 
 h1 {
     font-family: 'fontHTML', serif;
+    color: var(--text-primary);
+}
+
+h4 {
+    color: var(--text-primary);
 }
 
 /*==============================
@@ -53,7 +121,8 @@ h1 {
   align-items: center;
   height: 130px;
   justify-content: space-evenly;
-  background-color: #f8f1e2;
+  background-color: var(--bg-header-welcome);
+  transition: background-color 0.3s ease;
 }
 
 .header-bienvenida h2 {
@@ -65,7 +134,8 @@ h1 {
 }
 
 .pagina-bienvenida {
-  background-color: #ff8732;
+  background-color: var(--bg-welcome);
+  transition: background-color 0.3s ease;
 }
 
 .main-bienvenida {
@@ -88,9 +158,10 @@ h1 {
   font-size: 24px;
   border-radius: 5px;
   border: 3px solid;
+  color: var(--text-primary);
+  background-color: var(--bg-card);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
-
-
 
 /*==============================
     Pagina productos
@@ -116,13 +187,15 @@ h1 {
 .search-bar {
     padding: 8px;
     border-radius: 4px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     position: absolute; /* Para que se abra encima de otros elementos */
     right: 150px; /* Ajustalo según donde quieras que aparezca */
     top: 60px;
     transition: opacity 0.3s ease, visibility 0.3s;
     opacity: 1;
     visibility: visible;
+    background-color: var(--bg-card);
+    color: var(--text-primary);
 }
 
 .header-productos {
@@ -148,7 +221,7 @@ h1 {
   background-position: center;
   background-repeat: no-repeat;
   padding: 20px 0; 
-  border-bottom: 3px solid #bfa15f; 
+  border-bottom: 3px solid var(--color-dorado);
   display: flex; /* Ponemos todos los elementos en fila */
   justify-content: space-between; /* Empuja los bloques equitativamente: logo a la izquierda, carrito a la derecha */
   align-items: center; /* Centra el logo, la barra de búsqueda y el carrito verticalmente */
@@ -158,7 +231,7 @@ h1 {
   
   /* El truco del padding: le da el alto suficiente arriba y abajo para que se luzca el relieve de la piedra */
   padding: 20px 40px; 
-  border-bottom: 4px solid #bfa15f; /* Tu sutil cierre dorado mundialista */
+  border-bottom: 4px solid var(--color-dorado); /* Tu sutil cierre dorado mundialista */
 }
 
 
@@ -179,7 +252,7 @@ h1 {
 /* El efecto Hover para cuando pasas el mouse por arriba */
 .navbar-productos a:hover,
 .cart:hover {
-    color: #ffd700;
+    color: var(--color-hover);
     cursor: pointer;
 }
 
@@ -230,7 +303,7 @@ h1 {
 }
 
 .product-card {
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-color);
   padding: 10px;
   text-align: center;
   width: 200px;
@@ -239,10 +312,10 @@ h1 {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  background-color: white;
-  box-shadow: 0 4px 8px 0 #bfa15f, 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  border-radius: 5px;
+  background-color: var(--bg-card);
+  box-shadow: var(--card-shadow);
   border: 4px solid transparent;
+  transition: background-color 0.3s ease, border 0.3s ease, box-shadow 0.3s ease;
 }
 
 .product-card:hover {
@@ -259,15 +332,16 @@ h1 {
 .product-card h3 {
   font-size: 1.2rem;
   margin: 10px 0;
+  color: var(--text-primary);
 }
 
 .product-card p {
   font-size: 1rem;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .product-card button, .orange-btn {
-  background-color: #bfa15f;;
+  background-color: var(--color-dorado);
   color: white;
   padding: 10px;
   border-radius: 5px;
@@ -276,16 +350,17 @@ h1 {
 }
 
 .product-card button:hover {
-  background-color: white;
-  color: #bfa15f;
-  border: 2px solid #bfa15f;;
+  background-color: var(--bg-card);
+  color: var(--color-dorado);
+  border: 2px solid var(--color-dorado);
 }
 
 /* Cart Section */
 .cart-section {
   padding: 20px;
-  background-color: #f8f9fa;
-  border-top: 1px solid #ccc;
+  background-color: var(--bg-cart-section);
+  border-top: 1px solid var(--border-color);
+  transition: background-color 0.3s ease;
 }
 
 #cart-items {
@@ -300,6 +375,7 @@ h1 {
 
 .item-name, .info-carrito {
   font-size: 20px;
+  color: var(--text-primary);
 }
 
 .delete-button {
@@ -330,4 +406,79 @@ h1 {
 .cart-total {
   font-size: 1.2rem;
   text-align: right;
+}
+
+.cart-total p {
+  color: var(--text-primary);
+}
+
+/*==============================
+    Filtros de categoria
+===============================*/
+.category-filters {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.filter-btn {
+  padding: 8px 20px;
+  border: 2px solid var(--color-dorado);
+  background: var(--bg-filter-btn);
+  color: var(--color-dorado);
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+  background: var(--color-dorado);
+  color: white;
+}
+
+.product-category {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin: 5px 0;
+}
+
+/*==============================
+    Controles de cantidad (carrito)
+===============================*/
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qty-btn {
+  background: var(--color-dorado);
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+}
+
+.qty-btn:hover {
+  background: var(--color-hover);
+}
+
+.qty-value {
+  font-size: 1.1rem;
+  font-weight: bold;
+  min-width: 20px;
+  text-align: center;
+  color: var(--text-primary);
 }

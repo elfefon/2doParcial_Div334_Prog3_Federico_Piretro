@@ -8,18 +8,38 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap" rel="stylesheet">
-    <!-- Apuntamos al recurso dentro de public
-    Esta ruta seria:
-        localhost:3000/assets/img/favicon.ico 
-    -->
-    <!-- Pasamos de la ruta desde el index.html -> assets... 
-    A la ruta relativa donde agregamos una /
-    para que apunte a localhost:3000/assets/img/favicon.ico 
-    -->
     <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon">
-    
+
     <!-- Preset CSS -->
     <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura-vader.css" type="text/css">
     <link rel="stylesheet" href="/css/styles.css">
+    <script>
+        (function() {
+            if (localStorage.getItem("theme") === "dark") {
+                document.documentElement.setAttribute("data-theme", "dark");
+            }
+        })();
+    </script>
 </head>
 <body>
+<script>
+function toggleAdminTheme() {
+    const html = document.documentElement;
+    const btn = document.querySelector(".admin-theme-toggle");
+    if (html.getAttribute("data-theme") === "dark") {
+        html.removeAttribute("data-theme");
+        localStorage.setItem("theme", "light");
+        btn.textContent = "\u263E";
+    } else {
+        html.setAttribute("data-theme", "dark");
+        localStorage.setItem("theme", "dark");
+        btn.textContent = "\u2600";
+    }
+}
+(function() {
+    const btn = document.querySelector(".admin-theme-toggle");
+    if (btn) {
+        btn.textContent = document.documentElement.getAttribute("data-theme") === "dark" ? "\u2600" : "\u263E";
+    }
+})();
+</script>

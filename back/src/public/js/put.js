@@ -109,8 +109,8 @@ function formularioPutProducto(event, producto) {
 
             <label for="categoryProd">Categoria</label>
             <select name="category" id="categoryProd" required>
-                <option value="food">comida</option>
-                <option value="drink">bebida</option>
+                <option value="local">Local</option>
+                <option value="visitante">Visitante</option>
             </select>
 
             <label for="priceProd">Precio</label>

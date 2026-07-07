@@ -36,7 +36,7 @@ const validateId = (req, res, next) => {
 
 
 // Middleware de ruta para validar los campos de un formulario
-const categoriasValidas = ["food", "drink"];
+const categoriasValidas = ["local", "visitante"];
 const validateProduct = (req, res, next) => {
 
     // Recogemos los datos del body

@@ -7,21 +7,12 @@ import connection from "../database/db.js";
 ///////////////////////////////
 // Traer todos los productos
 const selectAllProducts = () => {
-    ///////////////////
-    // Optimizacion 1: evitamos traer columnas innecesarias en la consulta SQL (mas eficiente en memoria y red)
-    const sql = "SELECT id, name, price, image FROM products";
-
-    return connection.query(sql); // En rows guardamos los resultados de nuestra sentencia SQL
+    const sql = "SELECT id, name, price, image, category FROM products";
+    return connection.query(sql);
 }
 
-
-///////////////////////////////
-// Traer productos por id
 const selectProductById = (id) => {
-    //////////////////////
-    // Optimizacion 2: Seleccionamos los campos necesarios
-    // Este interrogante es el placeholder "?" que nos permite escribir sentencias SQL seguras (preveniendo ataques de inyeccion SQL)
-    const sql = "SELECT id, name, price, image FROM products where products.id = ?";
+    const sql = "SELECT id, name, price, image, category FROM products where products.id = ?";
     return connection.query(sql, [id]);
 }
 
