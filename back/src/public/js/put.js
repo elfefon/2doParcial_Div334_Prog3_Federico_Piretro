@@ -99,20 +99,21 @@ function formularioPutProducto(event, producto) {
     let htmlUpdateForm = `
         <h2>Actualizar producto</h2>
     
-        <form id="updateProduct-form" class="form-alta">
+        <form id="updateProduct-form" class="form-alta" enctype="multipart/form-data">
 
             <input type="hidden" id="idProd" name="id" value="${producto.id}">
+            <input type="hidden" name="currentImage" value="${producto.image}">
 
             <label for="nameProd">Nombre</label>
             <input type="text" name="name" id="nameProd" value="${producto.name}" required>
 
-            <label for="imageProd">Imagen</label>
-            <input type="text" name="image" id="imageProd" value="${producto.image}" required>
+            <label for="imageProd">Imagen (dejar vacio para mantener la actual)</label>
+            <input type="file" name="image" id="imageProd" accept="image/*">
 
             <label for="categoryProd">Categoria</label>
             <select name="category" id="categoryProd" required>
-                <option value="local">Local</option>
-                <option value="visitante">Visitante</option>
+                <option value="local" ${producto.category === "local" ? "selected" : ""}>Local</option>
+                <option value="visitante" ${producto.category === "visitante" ? "selected" : ""}>Visitante</option>
             </select>
 
             <label for="countryProd">Pais</label>
@@ -123,8 +124,8 @@ function formularioPutProducto(event, producto) {
 
             <label for="activeProd">Activo</label>
             <select name="active" id="activeProd" required>
-                <option value="1">activo</option>
-                <option value="0">inactivo</option>
+                <option value="1" ${producto.active == 1 ? "selected" : ""}>activo</option>
+                <option value="0" ${producto.active == 0 ? "selected" : ""}>inactivo</option>
             </select>
             
             <div>
@@ -154,30 +155,13 @@ async function actualizarProducto(event) {
         return;
     }
 
-    // Optimizacion 3 OPCIONAL
-    //const data = Object.fromEntries(new FormData(event.target().entries()));
-
-    
-    // event.target hace referencia la formulario que detono el evento
+    // Obtenemos el FormData directamente del formulario (incluye archivos si se seleccionaron)
     const formData = new FormData(event.target);
-
-    // Aca transformamos nuestro objeto FormData en un objeto normal JS
+    
+    // Validamos los campos obligatorios antes de enviar
     const data = Object.fromEntries(formData.entries());
     
-    /*
-    Object
-        id: "41"
-        active: "1"
-        category: "food"
-        image: "https://pointlaventanita.com/wp-content/uploads/2024/05/chabona.webp"
-        name: "Fernet Cola Chabona"
-        price: "4300.00"
-    */
-    console.table(data);
-
-
-    // Optimizacion 4: Validacion previa en el clinete
-    if (!data.name || !data.image || !data.price) {
+    if (!data.name || !data.price) {
         alert("Todos los campos son obligatorios");
         return;
     }
@@ -185,10 +169,7 @@ async function actualizarProducto(event) {
     try {
         const response = await fetch(urlBase, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
+            body: formData // FormData se envia sin header Content-Type, el browser lo configura solo con el boundary
         });
 
         console.log(response);
@@ -208,7 +189,6 @@ async function actualizarProducto(event) {
 
     } catch (error) {
         console.error("Error al enviar los datos: ", error.message);
-        // alert("Error al actualizar el producto");
         mostrarError(error.message);
     }
     

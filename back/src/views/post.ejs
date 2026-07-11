@@ -6,12 +6,12 @@
     <section class="form-productos">
         <h2> <%= about %> </h2>
         
-        <form id="postProduct-form" class="form-alta">
+        <form id="postProduct-form" class="form-alta" enctype="multipart/form-data">
             <label for="nameProd">Nombre</label>
             <input type="text" name="name" id="nameProd" required>
 
             <label for="imageProd">Imagen</label>
-            <input type="text" name="image" id="imageProd" required>
+            <input type="file" name="image" id="imageProd" accept="image/*" required>
 
             <label for="categoryProd">Categoria</label>
             <select name="category" id="categoryProd" required>

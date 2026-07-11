@@ -37,6 +37,11 @@ const validateId = (req, res, next) => {
 
 // Middleware de ruta para validar los campos de un formulario
 const categoriasValidas = ["local", "visitante"];
+
+// Configuracion de tipos de imagen permitidos para multer
+const extensionesPermitidas = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+const mensajeErrorExtension = "Solo se permiten archivos de imagen (jpg, png, webp, gif)";
+
 const validateProduct = (req, res, next) => {
 
     // Recogemos los datos del body
@@ -53,8 +58,10 @@ const validateProduct = (req, res, next) => {
         errores.push("El precio debe ser un numero mayor a 0");
     }
 
-    // No validaremos imagenes porque posteriormente usaremos Multer
-    // https://www.npmjs.com/package/multer
+    // Validacion de imagen con multer (middleware de upload aplicado antes en la ruta)
+    if (!req.file) {
+        errores.push("La imagen es requerida y debe ser un archivo valido");
+    }
 
     if (!categoriasValidas.includes(category)) {
         errores.push("Categoria invalida");
@@ -90,5 +97,8 @@ export {
     loggerURL,
     validateId,
     validateProduct,
-    requireLogin
+    requireLogin,
+    categoriasValidas,
+    extensionesPermitidas,
+    mensajeErrorExtension
 }

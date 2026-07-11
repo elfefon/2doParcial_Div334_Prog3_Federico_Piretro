@@ -94,19 +94,11 @@ export const createProduct = async (req, res) => {
         // Gracias al middleware app.use(express.json()) puedo recibir la informacion como objetos en el req.body
         // console.log(req.body); 
 
-        // Comprobamos que efectivamente vienen los datos del req.body parseados
-        /*{
-            name: 'Fernet Branca',
-            image: 'https://http2.mlstatic.com/D_Q_NP_2X_685551-MLA99433693010_112025-E.webp',
-            category: 'drink',
-            price: '123'
-        }*/
-
         // Con destructuring, extraigo los datos del req.body en variables sueltas
-        const { name, image, category, country, price } = req.body;
+        const { name, category, country, price } = req.body;
 
         // Optimizacion 2: Verificamos los datos de entrada
-        if (!name || !image || !category || !country || !price) {
+        if (!name || !category || !country || !price) {
             return res.status(400).json({
                 message: "Datos invalidos, asegurate de incluir todas las categorias"
             });
@@ -115,11 +107,10 @@ export const createProduct = async (req, res) => {
         // Optimizacion 3: Sanitizamos los strings antes de insertar para normalizar los datos
         const cleanName = name.trim();
 
-        /*
-        console.log(`URL del refrigerio: ${image}`);
-        console.log(`Nombre del fernetazo: ${name}`);
-        console.log(price);
-        */
+        // Multer guarda la info del archivo en req.file
+        // Construimos la ruta relativa para almacenar en la BBDD
+        const image = `/uploads/products/${req.file.filename}`;
+
         const [rows] = await ProductModels.insertProduct(cleanName, image, category, country, price);
 
         // Optimizacion 5: En lugar de 200 OK, mejor 201 Created
@@ -146,15 +137,20 @@ export const modifyProduct = async (req, res) => {
 
     try {
         // Con el destructuring, recibimos todos los datos del producto
-        const { id, name, image, category, country, price, active } = req.body;
+        const { id, name, category, country, price, active } = req.body;
 
         // Optimizacion 1: Validamos que vengan los campos necesarios antes de tocar la BBDD
-        if (!name || !image || !price || !category || !country) {
+        if (!name || !price || !category || !country) {
             return res.status(400).json({
                 message: "Todos los campos son requeridos (name, image, price, category, country)"
             });
         }
 
+        // Si se subio una nueva imagen, usamos la nueva; si no, mantenemos la existente
+        let image = req.body.currentImage; // Viene del campo hidden del formulario
+        if (req.file) {
+            image = `/uploads/products/${req.file.filename}`;
+        }
        
         const [result] = await ProductModels.updateProduct(name, image, category, country, price, active, id);
 
