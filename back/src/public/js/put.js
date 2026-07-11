@@ -93,8 +93,10 @@ function renderizarProducto(producto) {
 function formularioPutProducto(event, producto) {
     event.stopPropagation();
 
-    // Verificamos si el producto llega correctamente
     console.log(producto);
+
+    // Determinamos si la imagen actual es una URL externa o un archivo local
+    const esUrlExterna = producto.image && (producto.image.startsWith("http://") || producto.image.startsWith("https://"));
 
     let htmlUpdateForm = `
         <h2>Actualizar producto</h2>
@@ -107,8 +109,28 @@ function formularioPutProducto(event, producto) {
             <label for="nameProd">Nombre</label>
             <input type="text" name="name" id="nameProd" value="${producto.name}" required>
 
-            <label for="imageProd">Imagen (dejar vacio para mantener la actual)</label>
-            <input type="file" name="image" id="imageProd" accept="image/*">
+            <fieldset class="imagen-fieldset">
+                <legend>Imagen del producto (dejar como está para mantener la actual)</legend>
+
+                <div class="imagen-opciones">
+                    <label class="radio-label">
+                        <input type="radio" name="imagenTipo" value="url" ${esUrlExterna ? "checked" : ""}> URL de imagen
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="imagenTipo" value="archivo" ${!esUrlExterna ? "checked" : ""}> Subir archivo
+                    </label>
+                </div>
+
+                <div id="input-url" class="imagen-input" style="${esUrlExterna ? "" : "display:none;"}">
+                    <label for="imageUrl">URL de la imagen</label>
+                    <input type="url" name="imageUrl" id="imageUrl" value="${esUrlExterna ? producto.image : ""}" placeholder="https://ejemplo.com/imagen.jpg">
+                </div>
+
+                <div id="input-archivo" class="imagen-input" style="${esUrlExterna ? "display:none;" : ""}">
+                    <label for="imageFile">Seleccionar archivo</label>
+                    <input type="file" name="imageFile" id="imageFile" accept="image/*">
+                </div>
+            </fieldset>
 
             <label for="categoryProd">Categoria</label>
             <select name="category" id="categoryProd" required>
@@ -136,31 +158,80 @@ function formularioPutProducto(event, producto) {
 
     contenedorForm.innerHTML = htmlUpdateForm;
 
-    const updateProductForm = document.getElementById("updateProduct-form");
+    // Toggle entre URL y archivo
+    const radioUrl = document.querySelector('input[name="imagenTipo"][value="url"]');
+    const radioArchivo = document.querySelector('input[name="imagenTipo"][value="archivo"]');
+    const inputUrl = document.getElementById("input-url");
+    const inputArchivo = document.getElementById("input-archivo");
 
+    radioUrl.addEventListener("change", () => {
+        inputUrl.style.display = "";
+        inputArchivo.style.display = "none";
+    });
+
+    radioArchivo.addEventListener("change", () => {
+        inputUrl.style.display = "none";
+        inputArchivo.style.display = "";
+    });
+
+    const updateProductForm = document.getElementById("updateProduct-form");
     updateProductForm.addEventListener("submit", event => {
-        actualizarProducto(event); // Aca enviamos los datos del formulario al servidor
+        actualizarProducto(event);
     });
 }
 
 // Envio de datos del formulario de actualizacion de producto
 async function actualizarProducto(event) {
-    event.preventDefault(); // Evitamos el envio por defecto del formulario
+    event.preventDefault();
 
     const confirmacion = confirm("Querés actualizar este producto?");
-    
-    // En caso de que cancelemos, se termino la funcion
     if(!confirmacion) {
         alert("Actualización cancelada");
         return;
     }
 
-    // Obtenemos el FormData directamente del formulario (incluye archivos si se seleccionaron)
     const formData = new FormData(event.target);
-    
-    // Validamos los campos obligatorios antes de enviar
+    const tipoImagen = formData.get("imagenTipo");
+    const currentImage = formData.get("currentImage");
+
+    formData.delete("imagenTipo");
+
+    if (tipoImagen === "url") {
+        const urlValor = formData.get("imageUrl");
+        formData.delete("imageUrl");
+        formData.delete("imageFile");
+
+        if (urlValor && urlValor.trim().length > 0) {
+            formData.append("image", urlValor.trim());
+        } else {
+            // Si no puso URL, mantenemos la imagen actual
+            formData.append("image", currentImage);
+        }
+    } else {
+        const file = formData.get("imageFile");
+        formData.delete("imageUrl");
+        formData.delete("imageFile");
+
+        if (file && file.size > 0) {
+            const extensionesPermitidas = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+            if (!extensionesPermitidas.includes(file.type)) {
+                mostrarError("Solo se permiten archivos de imagen (jpg, png, webp, gif)");
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                mostrarError("La imagen no puede superar los 5 MB");
+                return;
+            }
+            formData.append("image", file);
+        } else {
+            // Si no subió archivo, mantenemos la imagen actual
+            formData.append("image", currentImage);
+        }
+    }
+
+    formData.delete("currentImage");
+
     const data = Object.fromEntries(formData.entries());
-    
     if (!data.name || !data.price) {
         alert("Todos los campos son obligatorios");
         return;
@@ -169,19 +240,16 @@ async function actualizarProducto(event) {
     try {
         const response = await fetch(urlBase, {
             method: "PUT",
-            body: formData // FormData se envia sin header Content-Type, el browser lo configura solo con el boundary
+            body: formData
         });
 
         console.log(response);
         const result = await response.json();
 
-        // Si respuesta es 200 OK
         if(response.ok) {
-            // Vaciamos el formulario de actualizacion
             contenedorForm.innerHTML = "";
             console.log(result.message);
             mostrarExito(result.message);
-
         } else {
             console.error("Error:", result.message);
             mostrarError(result.message);

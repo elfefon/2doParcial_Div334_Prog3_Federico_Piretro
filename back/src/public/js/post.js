@@ -1,8 +1,25 @@
 const contenedorProductos = document.getElementById("contenedor-productos");
 const postProductForm = document.getElementById("postProduct-form");
 
+// Elementos para alternar entre URL y archivo
+const radioUrl = document.querySelector('input[name="imagenTipo"][value="url"]');
+const radioArchivo = document.querySelector('input[name="imagenTipo"][value="archivo"]');
+const inputUrl = document.getElementById("input-url");
+const inputArchivo = document.getElementById("input-archivo");
+
+// Toggle entre URL y archivo
+radioUrl.addEventListener("change", () => {
+    inputUrl.style.display = "";
+    inputArchivo.style.display = "none";
+});
+
+radioArchivo.addEventListener("change", () => {
+    inputUrl.style.display = "none";
+    inputArchivo.style.display = "";
+});
+
 //////////////////
-// Optimizacion 3: Validacion previa de los datos en el cliente
+// Validacion previa de los datos en el cliente
 function validarFormulario(data) {
 
     const errores = [];
@@ -31,8 +48,8 @@ function validarImagen(file) {
     const extensionesPermitidas = ["image/jpeg", "image/png", "image/webp", "image/gif"];
     const maxSize = 5 * 1024 * 1024; // 5 MB
 
-    if (!file) {
-        return "Debe seleccionar una imagen";
+    if (!file || file.size === 0) {
+        return "Debe seleccionar un archivo de imagen";
     }
 
     if (!extensionesPermitidas.includes(file.type)) {
@@ -46,7 +63,6 @@ function validarImagen(file) {
     return null; // Sin errores
 }
 
-// Optimizacion 4: Creamos una funcion para mostrar posibles mensajes al crear un producto
 function mostrarMensaje(tipo, mensaje) {
     contenedorProductos.innerHTML = `
         <p class="mensaje mensaje-${tipo}">${mensaje}</p>
@@ -54,20 +70,38 @@ function mostrarMensaje(tipo, mensaje) {
 }
 
 
-
 postProductForm.addEventListener("submit", async event => {
-    event.preventDefault(); // Detenemos el envio por defecto del formulario
+    event.preventDefault();
 
-    // Obtenemos la info del formulario como FormData (incluye el archivo)
     const formData = new FormData(event.target);
-    console.log(formData);
+    const tipoImagen = formData.get("imagenTipo");
 
-    // Validamos el archivo de imagen antes de enviar
-    const file = formData.get("image");
-    const errorImagen = validarImagen(file);
-    if (errorImagen) {
-        mostrarMensaje("error", errorImagen);
-        return;
+    // Eliminamos campos que no se usan para que no viajen de más
+    formData.delete("imagenTipo");
+
+    if (tipoImagen === "url") {
+        // Si eligió URL, la mandamos como campo "image" en el body
+        const urlValor = formData.get("imageUrl");
+        formData.delete("imageUrl");
+        formData.delete("imageFile");
+
+        if (urlValor && urlValor.trim().length > 0) {
+            formData.append("image", urlValor.trim());
+        }
+    } else {
+        // Si eligió archivo, lo mandamos como "image" (multer lo procesa)
+        const file = formData.get("imageFile");
+        formData.delete("imageUrl");
+        formData.delete("imageFile");
+
+        if (file && file.size > 0) {
+            const errorImagen = validarImagen(file);
+            if (errorImagen) {
+                mostrarMensaje("error", errorImagen);
+                return;
+            }
+            formData.append("image", file);
+        }
     }
 
     // Validamos los demas campos del formulario
@@ -80,30 +114,26 @@ postProductForm.addEventListener("submit", async event => {
         return;
     }
 
-    // Enviamos FormData directamente (multipart/form-data, NO application/json)
     try {
         const urlBase = "http://localhost:3000/api/products/"
         const response = await fetch(urlBase, {
             method: "POST",
-            body: formData // FormData se envia sin header Content-Type, el browser lo configura solo con el boundary
+            body: formData
         });
 
         console.log(response);
         const result = await response.json();
 
-        // Optimizacion 5: Manejamos respuestas no ok del servidor
         if (!response.ok) {
-            mostrarMensaje("error", result.message);
+            mostrarMensaje("error", result.errores ? result.errores.join("\n") : result.message);
             return;
         }
 
         console.log(result.message);
-
-        // Optimizacion 4: Reutilizamos la funcion de mostrarMensaje
         mostrarMensaje("exito", result.message);
 
     } catch (error) {
         console.error("Error al enviar los datos: ", error);
-        mostrarMensaje("error", "Error al procesar la solcitud")
+        mostrarMensaje("error", "Error al procesar la solicitud");
     }
 });

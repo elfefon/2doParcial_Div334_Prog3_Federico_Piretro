@@ -10,8 +10,28 @@
             <label for="nameProd">Nombre</label>
             <input type="text" name="name" id="nameProd" required>
 
-            <label for="imageProd">Imagen</label>
-            <input type="file" name="image" id="imageProd" accept="image/*" required>
+            <fieldset class="imagen-fieldset">
+                <legend>Imagen del producto (opcional)</legend>
+
+                <div class="imagen-opciones">
+                    <label class="radio-label">
+                        <input type="radio" name="imagenTipo" value="url" checked> URL de imagen
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="imagenTipo" value="archivo"> Subir archivo
+                    </label>
+                </div>
+
+                <div id="input-url" class="imagen-input">
+                    <label for="imageUrl">URL de la imagen</label>
+                    <input type="url" name="imageUrl" id="imageUrl" placeholder="https://ejemplo.com/imagen.jpg">
+                </div>
+
+                <div id="input-archivo" class="imagen-input" style="display:none;">
+                    <label for="imageFile">Seleccionar archivo</label>
+                    <input type="file" name="imageFile" id="imageFile" accept="image/*">
+                </div>
+            </fieldset>
 
             <label for="categoryProd">Categoria</label>
             <select name="category" id="categoryProd" required>

@@ -45,7 +45,12 @@ const mensajeErrorExtension = "Solo se permiten archivos de imagen (jpg, png, we
 const validateProduct = (req, res, next) => {
 
     // Recogemos los datos del body
-    const { name, price, category, country } = req.body;
+    // FormData envia todo como string, asi que parseamos price a numero
+    const { name, category, country } = req.body;
+    const price = Number(req.body.price);
+
+    // Normalizamos la categoria a minusculas para comparar con las validas
+    const categoryNormalizada = category ? category.toLowerCase() : "";
 
     // Creamos un array de errores
     const errores = [];
@@ -54,16 +59,13 @@ const validateProduct = (req, res, next) => {
         errores.push("El nombre debe tener al menos 2 caracteres");
     }
 
-    if (typeof price !== "number" || price <= 0) {
+    if (isNaN(price) || price <= 0) {
         errores.push("El precio debe ser un numero mayor a 0");
     }
 
-    // Validacion de imagen con multer (middleware de upload aplicado antes en la ruta)
-    if (!req.file) {
-        errores.push("La imagen es requerida y debe ser un archivo valido");
-    }
+    // La imagen es opcional: puede venir como archivo (req.file), como URL (req.body.image), o no venir
 
-    if (!categoriasValidas.includes(category)) {
+    if (!categoriasValidas.includes(categoryNormalizada)) {
         errores.push("Categoria invalida");
     }
 
@@ -77,6 +79,9 @@ const validateProduct = (req, res, next) => {
             message: "Datos invalidos", errores
         })
     }
+
+    // Sobreescribimos price ya parseado para que el controller lo reciba como numero
+    req.body.price = price;
 
     next();
 }

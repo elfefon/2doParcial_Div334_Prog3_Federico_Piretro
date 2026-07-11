@@ -89,40 +89,33 @@ export const getProductById = async (req, res) => {
 export const createProduct = async (req, res) => {
 
     try {
-        // Optimizacion 1: Validamos los datos recibidos en el middleware validateProduct (validaciones mas especificas por campo y separadas en un middleware reutilizable)
-
-        // Gracias al middleware app.use(express.json()) puedo recibir la informacion como objetos en el req.body
-        // console.log(req.body); 
-
-        // Con destructuring, extraigo los datos del req.body en variables sueltas
         const { name, category, country, price } = req.body;
 
-        // Optimizacion 2: Verificamos los datos de entrada
         if (!name || !category || !country || !price) {
             return res.status(400).json({
                 message: "Datos invalidos, asegurate de incluir todas las categorias"
             });
         }
 
-        // Optimizacion 3: Sanitizamos los strings antes de insertar para normalizar los datos
         const cleanName = name.trim();
 
-        // Multer guarda la info del archivo en req.file
-        // Construimos la ruta relativa para almacenar en la BBDD
-        const image = `/uploads/products/${req.file.filename}`;
+        // Determinamos la imagen: si se subio archivo usamos la ruta local, si no usamos la URL
+        let image = "";
+        if (req.file) {
+            image = `/uploads/products/${req.file.filename}`;
+        } else if (req.body.image) {
+            image = req.body.image.trim();
+        }
 
         const [rows] = await ProductModels.insertProduct(cleanName, image, category, country, price);
 
-        // Optimizacion 5: En lugar de 200 OK, mejor 201 Created
         res.status(201).json({
             message: `Producto creado con exito con id ${rows.insertId}`,
-            productId: rows.insertId // Optimizacion 4: Obtenemos tambien el id creado
+            productId: rows.insertId
         });
 
     } catch (error) {
         console.log(error);
-
-        // Optimizacion 6: Devolvemos una respuesta 500
         res.status(500).json({
             message: "Error interno del servidor"
         })
@@ -136,31 +129,29 @@ export const createProduct = async (req, res) => {
 export const modifyProduct = async (req, res) => {
 
     try {
-        // Con el destructuring, recibimos todos los datos del producto
         const { id, name, category, country, price, active } = req.body;
 
-        // Optimizacion 1: Validamos que vengan los campos necesarios antes de tocar la BBDD
         if (!name || !price || !category || !country) {
             return res.status(400).json({
-                message: "Todos los campos son requeridos (name, image, price, category, country)"
+                message: "Todos los campos son requeridos (name, price, category, country)"
             });
         }
 
-        // Si se subio una nueva imagen, usamos la nueva; si no, mantenemos la existente
-        let image = req.body.currentImage; // Viene del campo hidden del formulario
+        // Determinamos la imagen: archivo nuevo, URL nueva, o mantener la actual
+        let image = req.body.currentImage || "";
         if (req.file) {
             image = `/uploads/products/${req.file.filename}`;
+        } else if (req.body.image) {
+            image = req.body.image.trim();
         }
        
         const [result] = await ProductModels.updateProduct(name, image, category, country, price, active, id);
 
-        // Optimizacion 2: Verificamos si realmente se actualizo algo
         if (result.affectedRows === 0) {
             return res.status(404).json({
                 message: "No se actualizó el producto"
             });
         }
-
 
         return res.status(200).json({
             message: `Producto con id ${id} actualizado correctamente`
@@ -168,8 +159,6 @@ export const modifyProduct = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-
-        // Optimizacion 3: Devolvemos un error 500 si fallo algo en el servidor
         res.status(500).json({
             message: "Error interno al actualizar el producto"
         })
