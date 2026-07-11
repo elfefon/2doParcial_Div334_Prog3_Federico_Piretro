@@ -72,7 +72,7 @@ function renderizarProducto(producto) {
     <ul>
         <li class="lista-producto${inactivo ? ' inactivo' : ''}">
             <img src="${producto.image}" alt="${producto.name}">
-            <p>Id: ${producto.id} / Nombre: ${producto.name} / <strong>Precio: $${producto.price}</strong></p>
+            <p>Id: ${producto.id} / Nombre: ${producto.name} / Pais: ${producto.country} / <strong>Precio: $${producto.price}</strong></p>
             ${inactivo ? '<p class="badge-inactivo">INACTIVO</p>' : ''}
             <input type="button" id="deleteProduct-button" value="Eliminar Producto">
         </li>

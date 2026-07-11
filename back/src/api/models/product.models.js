@@ -7,12 +7,12 @@ import connection from "../database/db.js";
 ///////////////////////////////
 // Traer todos los productos
 const selectAllProducts = () => {
-    const sql = "SELECT id, name, price, image, category, active FROM products";
+    const sql = "SELECT id, name, price, image, category, country, active FROM products";
     return connection.query(sql);
 }
 
 const selectProductById = (id) => {
-    const sql = "SELECT id, name, price, image, category, active FROM products where products.id = ?";
+    const sql = "SELECT id, name, price, image, category, country, active FROM products where products.id = ?";
     return connection.query(sql, [id]);
 }
 
@@ -20,22 +20,22 @@ const selectProductById = (id) => {
 
 ///////////////////////////////
 // Crear nuevo producto
-const insertProduct = (name, image, category, price) => {
+const insertProduct = (name, image, category, country, price) => {
 
-    const sql = "INSERT INTO products (name, image, category, price) VALUES (?, ?, ?, ?)";
+    const sql = "INSERT INTO products (name, image, category, country, price) VALUES (?, ?, ?, ?, ?)";
 
     // Optimizacion 4: Guardamos la respuesta en rows, para obtener el id rows.insertId
-    return connection.query(sql, [name, image, category, price]);
+    return connection.query(sql, [name, image, category, country, price]);
 }
 
 
 
 ///////////////////////////////
 // Modificar producto
-const updateProduct = (name, image, category, price, active, id) => {
-    const sql = "UPDATE products SET name = ?, image = ?, category = ?, price = ?, active = ? WHERE id = ?";
+const updateProduct = (name, image, category, country, price, active, id) => {
+    const sql = "UPDATE products SET name = ?, image = ?, category = ?, country = ?, price = ?, active = ? WHERE id = ?";
 
-    return connection.query(sql, [name, image, category, price, active, id]);
+    return connection.query(sql, [name, image, category, country, price, active, id]);
 }
 
 

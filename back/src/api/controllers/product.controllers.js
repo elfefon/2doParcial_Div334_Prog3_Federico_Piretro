@@ -103,10 +103,10 @@ export const createProduct = async (req, res) => {
         }*/
 
         // Con destructuring, extraigo los datos del req.body en variables sueltas
-        const { name, image, category, price } = req.body;
+        const { name, image, category, country, price } = req.body;
 
         // Optimizacion 2: Verificamos los datos de entrada
-        if (!name || !image || !category || !price) {
+        if (!name || !image || !category || !country || !price) {
             return res.status(400).json({
                 message: "Datos invalidos, asegurate de incluir todas las categorias"
             });
@@ -120,7 +120,7 @@ export const createProduct = async (req, res) => {
         console.log(`Nombre del fernetazo: ${name}`);
         console.log(price);
         */
-        const [rows] = await ProductModels.insertProduct(cleanName, image, category, price);
+        const [rows] = await ProductModels.insertProduct(cleanName, image, category, country, price);
 
         // Optimizacion 5: En lugar de 200 OK, mejor 201 Created
         res.status(201).json({
@@ -146,17 +146,17 @@ export const modifyProduct = async (req, res) => {
 
     try {
         // Con el destructuring, recibimos todos los datos del producto
-        const { id, name, image, category, price, active } = req.body;
+        const { id, name, image, category, country, price, active } = req.body;
 
         // Optimizacion 1: Validamos que vengan los campos necesarios antes de tocar la BBDD
-        if (!name || !image || !price || !category) {
+        if (!name || !image || !price || !category || !country) {
             return res.status(400).json({
-                message: "Todos los campos son requeridos (name, image, price, category"
+                message: "Todos los campos son requeridos (name, image, price, category, country)"
             });
         }
 
        
-        const [result] = await ProductModels.updateProduct(name, image, category, price, active, id);
+        const [result] = await ProductModels.updateProduct(name, image, category, country, price, active, id);
 
         // Optimizacion 2: Verificamos si realmente se actualizo algo
         if (result.affectedRows === 0) {
@@ -191,7 +191,6 @@ export const removeProduct = async (req, res) => {
        
         await ProductModels.deleteProduct(req.id);
     
-        // OPCION 1: 200 normal, devolvemos un 200 con un mensaje en el res.body
         res.status(200).json({
             message: `Producto con id ${req.id} eliminado exitosamente`
         });

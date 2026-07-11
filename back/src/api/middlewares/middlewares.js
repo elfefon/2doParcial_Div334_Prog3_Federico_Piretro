@@ -40,7 +40,7 @@ const categoriasValidas = ["local", "visitante"];
 const validateProduct = (req, res, next) => {
 
     // Recogemos los datos del body
-    const { name, price, category } = req.body;
+    const { name, price, category, country } = req.body;
 
     // Creamos un array de errores
     const errores = [];
@@ -58,6 +58,10 @@ const validateProduct = (req, res, next) => {
 
     if (!categoriasValidas.includes(category)) {
         errores.push("Categoria invalida");
+    }
+
+    if (typeof country !== "string" || country.trim().length < 2) {
+        errores.push("El pais debe tener al menos 2 caracteres");
     }
 
     // Detectamos si existe algun error en la lista y lo devolvemos en un "400"

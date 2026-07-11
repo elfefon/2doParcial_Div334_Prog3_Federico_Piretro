@@ -32,7 +32,7 @@
                          data-active="<%= producto.active %>">
                         <img src="<%= producto.image %>" alt="<%= producto.name %>">
                         <h4><%= producto.name %></h4>
-                        <p>Id: <%= producto.id %></p>
+                        <p>Id: <%= producto.id %> | Pais: <%= producto.country %></p>
                         <p>$<%= producto.price %></p>
                         <% if (inactivo) { %>
                             <p class="badge-inactivo">INACTIVO</p>

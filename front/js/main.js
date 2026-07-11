@@ -86,7 +86,7 @@ function mostrarProductos(array) {
                 <img src="${array[i].image}" alt="${array[i].name}">
                 <h3>${array[i].name}</h3>
                 <p>$${array[i].price}</p>
-                <p class="product-category">${array[i].category}</p>
+                <p class="product-category">${array[i].category} | ${array[i].country}</p>
                 ${inactivo
                     ? '<p class="badge-inactivo">INACTIVO</p>'
                     : `<button class="add-to-cart" onclick="agregarCarrito(${array[i].id})">Agregar a carrito</button>`

@@ -21,6 +21,10 @@ function validarFormulario(data) {
         errores.push("Debe seleccionar una categoria");
     }
 
+    if (!data.country || data.country.trim().length < 2) {
+        errores.push("El pais debe tener al menos 2 caracteres");
+    }
+
     return errores;
 }
 

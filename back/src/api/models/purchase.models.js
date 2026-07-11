@@ -12,7 +12,7 @@ const insertPurchase = (nombre_usuario, precio_total, ids_productos) => {
 
 const insertPurchaseProducts = (id_venta, ids_productos) => {
     if (!ids_productos || ids_productos.length === 0) return;
-    const unicos = [...new Set(ids_productos)];
+
     const values = unicos.map(id => [id_venta, id]);
     const sql = "INSERT INTO ventas_productos (id_venta, id_producto) VALUES ?";
     return connection.query(sql, [values]);

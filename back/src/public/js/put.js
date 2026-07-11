@@ -115,6 +115,9 @@ function formularioPutProducto(event, producto) {
                 <option value="visitante">Visitante</option>
             </select>
 
+            <label for="countryProd">Pais</label>
+            <input type="text" name="country" id="countryProd" value="${producto.country}" required>
+
             <label for="priceProd">Precio</label>
             <input type="number" name="price" id="priceProd" value="${producto.price}" required>
 
