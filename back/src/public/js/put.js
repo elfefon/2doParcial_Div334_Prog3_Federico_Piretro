@@ -69,7 +69,7 @@ function renderizarProducto(producto) {
     let htmlProducto = `
     <ul>
         <li class="lista-producto${inactivo ? ' inactivo' : ''}">
-            <img src="${producto.image}" alt="${producto.name}">
+            <img src="${producto.image}" alt="${producto.name}" onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text fill=%22%23999%22 font-family=%22Arial%22 font-size=%2214%22 text-anchor=%22middle%22 x=%22150%22 y=%22105%22>'+encodeURIComponent(this.alt)+'</text></svg>';">
             <p>Id: ${producto.id} / Nombre: ${producto.name} / <strong>Precio: $${producto.price}</strong></p>
             ${inactivo ? '<p class="badge-inactivo">INACTIVO</p>' : ''}
             <input type="button" id="updateProduct-button" value="Actualizar Producto">
