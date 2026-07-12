@@ -9,15 +9,33 @@ import ProductModels from "../models/product.models.js"
 // GET all products
 export const getAllProducts = async (req, res) => {
     try {
+        const { page, limit } = req.query;
 
-        
+        // Si se envían parámetros de paginación, devolvemos solo esa página
+        if (page || limit) {
+            const pageNum = Math.max(1, parseInt(page) || 1);
+            const limitNum = Math.min(50, Math.max(1, parseInt(limit) || 8));
+            const offset = (pageNum - 1) * limitNum;
+
+            const [rows] = await ProductModels.selectProductsPaginated(limitNum, offset);
+            const [countResult] = await ProductModels.countActiveProducts();
+            const total = countResult[0].total;
+            const totalPages = Math.ceil(total / limitNum);
+
+            return res.status(200).json({
+                payload: rows,
+                pagination: {
+                    total,
+                    page: pageNum,
+                    limit: limitNum,
+                    totalPages
+                }
+            });
+        }
+
+        // Sin paginación: devolver todos (comportamiento original)
         const [rows] = await ProductModels.selectAllProducts();
-        // En rows guardamos los resultados de nuestra sentencia SQL
-        // console.log(rows);
-        // el objeto res nos permitira devolver un codigo de estado y un tipo de respuesta
 
-        ///////////////////
-        // Optimizacion 2: Respuesta 404 si la BBDD no devuelve productos
         if (rows.length === 0) {
             return res.status(404).json({
                 message: "No se encontraron productos"
@@ -25,9 +43,6 @@ export const getAllProducts = async (req, res) => {
         }
         
         res.status(200).json({
-            
-            ///////////////////
-            // Optimizacion 3: Opcional, podemos devolver la cantidad de productos
             total: rows.length,
             payload: rows
         });
@@ -35,8 +50,6 @@ export const getAllProducts = async (req, res) => {
     } catch (error) {
         console.log("Error obteniendo productos: ", error.message);
 
-        ///////////////////
-        // Optimizacion 4: Si fallo la conexion a la BBDD, tardo demasiado, la tabla no existe o hay error de sintaxis
         res.status(500).json({
             message: "Error interno al obtener productos"
         })

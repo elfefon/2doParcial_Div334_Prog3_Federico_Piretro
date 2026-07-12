@@ -11,6 +11,20 @@ const selectAllProducts = () => {
     return connection.query(sql);
 }
 
+///////////////////////////////
+// Traer productos paginados (solo activos, para el cliente)
+const selectProductsPaginated = (limit, offset) => {
+    const sql = "SELECT id, name, price, image, category, country, active FROM products WHERE active = 1 ORDER BY id ASC LIMIT ? OFFSET ?";
+    return connection.query(sql, [limit, offset]);
+}
+
+///////////////////////////////
+// Contar total de productos activos
+const countActiveProducts = () => {
+    const sql = "SELECT COUNT(*) AS total FROM products WHERE active = 1";
+    return connection.query(sql);
+}
+
 const selectProductById = (id) => {
     const sql = "SELECT id, name, price, image, category, country, active FROM products where products.id = ?";
     return connection.query(sql, [id]);
@@ -51,6 +65,8 @@ const deleteProduct = (id) => {
 // Si no pongo default, tendre que importar con el mismo nombre
 export default {
     selectAllProducts,
+    selectProductsPaginated,
+    countActiveProducts,
     selectProductById,
     insertProduct,
     updateProduct,
