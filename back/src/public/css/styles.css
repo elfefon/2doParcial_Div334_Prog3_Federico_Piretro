@@ -396,6 +396,23 @@ header {
     color: white;
 }
 
+.admin-excel-btn {
+    display: inline-block;
+    margin: 10px 0 20px;
+    padding: 8px 20px;
+    background-color: #1a7a3a;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-family: "Nunito Sans", sans-serif;
+    transition: background-color 0.3s ease;
+}
+
+.admin-excel-btn:hover {
+    background-color: #145f2e;
+}
+
 /*==============================
     Productos inactivos
 ===============================*/
