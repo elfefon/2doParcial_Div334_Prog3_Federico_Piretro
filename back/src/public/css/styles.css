@@ -463,6 +463,46 @@ header {
 }
 
 /*==============================
+    Paginación del dashboard
+==============================*/
+.admin-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin: 24px 0 12px;
+}
+
+.admin-page-btn {
+    padding: 6px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    cursor: pointer;
+    font-family: "Nunito Sans", sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.admin-page-btn:hover:not(:disabled):not(.active) {
+    background: var(--color-hover);
+    color: white;
+    border-color: var(--color-hover);
+}
+
+.admin-page-btn.active {
+    background: var(--color-dorado);
+    color: white;
+    border-color: var(--color-dorado);
+}
+
+.admin-page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/*==============================
     Footer
 ===============================*/
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=EB+Garamond:ital@0;1&display=swap');
@@ -624,6 +664,16 @@ header {
     .admin-excel-btn {
         display: block;
         text-align: center;
+    }
+
+    .admin-pagination {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .admin-page-btn {
+        padding: 5px 10px;
+        font-size: 0.8rem;
     }
 
     .footer .title {

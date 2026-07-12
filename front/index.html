@@ -19,9 +19,17 @@
 </head>
 <body class="pagina-bienvenida">
     <header class="header-bienvenida">
-        <img src="src/img/logoPaginaPelota.jpg" class="logo-img" alt="Remera deportiva">
-        <h2>Remeras deportivas</h2>
-        <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">☾</button>
+        <nav class="navbar-bienvenida">
+            <div class="logo-container">
+                <img src="src/img/logoPaginaPelota.jpg" class="logo-img" alt="Logo Pelota">
+            </div>
+
+            <div class="logo">
+                <a href="" class="mynerve-regular">Remeras deportivas</a>
+            </div>
+
+            <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">☾</button>
+        </nav>
     </header>
 
     <main class="main-bienvenida">
@@ -59,19 +67,19 @@
             if (html.getAttribute("data-theme") === "dark") {
                 html.removeAttribute("data-theme");
                 localStorage.setItem("theme", "light");
-                btn.textContent = "\\u263E";
+                btn.textContent = "\u263E";
             } else {
                 html.setAttribute("data-theme", "dark");
                 localStorage.setItem("theme", "dark");
-                btn.textContent = "\\u2600";
+                btn.textContent = "\u2600";
             }
         }
         (function() {
             const btn = document.querySelector(".theme-toggle");
             if (document.documentElement.getAttribute("data-theme") === "dark") {
-                btn.textContent = "\\u2600";
+                btn.textContent = "\u2600";
             } else {
-                btn.textContent = "\\u263E";
+                btn.textContent = "\u263E";
             }
         })();
     </script>

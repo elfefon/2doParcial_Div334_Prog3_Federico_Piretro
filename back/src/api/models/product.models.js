@@ -12,6 +12,56 @@ const selectAllProducts = () => {
 }
 
 ///////////////////////////////
+// Contar todos los productos (para el dashboard)
+const countAllProducts = () => {
+    const sql = "SELECT COUNT(*) AS total FROM products";
+    return connection.query(sql);
+}
+
+///////////////////////////////
+// Traer productos paginados (todos, incluye inactivos, para el dashboard)
+const selectAllProductsPaginated = (limit, offset) => {
+    const sql = "SELECT id, name, price, image, category, country, active FROM products ORDER BY active DESC, id ASC LIMIT ? OFFSET ?";
+    return connection.query(sql, [limit, offset]);
+}
+
+///////////////////////////////
+// Contar productos con filtros
+const countAllProductsFiltered = (categoria, estado) => {
+    let sql = "SELECT COUNT(*) AS total FROM products WHERE 1=1";
+    const params = [];
+    if (categoria && categoria !== "todas") {
+        sql += " AND category = ?";
+        params.push(categoria);
+    }
+    if (estado === "activos") {
+        sql += " AND active = 1";
+    } else if (estado === "inactivos") {
+        sql += " AND active = 0";
+    }
+    return connection.query(sql, params);
+}
+
+///////////////////////////////
+// Traer productos paginados con filtros
+const selectAllProductsPaginatedFiltered = (limit, offset, categoria, estado) => {
+    let sql = "SELECT id, name, price, image, category, country, active FROM products WHERE 1=1";
+    const params = [];
+    if (categoria && categoria !== "todas") {
+        sql += " AND category = ?";
+        params.push(categoria);
+    }
+    if (estado === "activos") {
+        sql += " AND active = 1";
+    } else if (estado === "inactivos") {
+        sql += " AND active = 0";
+    }
+    sql += " ORDER BY active DESC, id ASC LIMIT ? OFFSET ?";
+    params.push(limit, offset);
+    return connection.query(sql, params);
+}
+
+///////////////////////////////
 // Traer productos paginados (solo activos, para el cliente)
 const selectProductsPaginated = (limit, offset) => {
     const sql = "SELECT id, name, price, image, category, country, active FROM products WHERE active = 1 ORDER BY id ASC LIMIT ? OFFSET ?";
@@ -65,6 +115,10 @@ const deleteProduct = (id) => {
 // Si no pongo default, tendre que importar con el mismo nombre
 export default {
     selectAllProducts,
+    countAllProducts,
+    selectAllProductsPaginated,
+    countAllProductsFiltered,
+    selectAllProductsPaginatedFiltered,
     selectProductsPaginated,
     countActiveProducts,
     selectProductById,
