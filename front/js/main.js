@@ -59,6 +59,12 @@ let productosPorPagina = 8;
 
 // Obtener productos////////////////////////////////////////////
 const url = "http://localhost:3000/api/products";
+const API_URL = "http://localhost:3000";
+
+function resolverUrlImagen(image) {
+    if (!image) return "";
+    return image.startsWith("/") ? API_URL + image : image;
+}
 
 async function obtenerProductos(page = 1) {
     try {
@@ -93,7 +99,7 @@ function mostrarProductos(array) {
     for(let i = 0; i < array.length; i++) {
         cartaProducto += `
             <div class="product-card">
-                <img src="${array[i].image}" alt="${array[i].name}" onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text fill=%22%23999%22 font-family=%22Arial%22 font-size=%2214%22 text-anchor=%22middle%22 x=%22150%22 y=%22105%22>'+encodeURIComponent(array[i].name)+'</text></svg>';">
+                <img src="${resolverUrlImagen(array[i].image)}" alt="${array[i].name}" onerror="this.onerror=null;this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22200%22><rect fill=%22%23f0f0f0%22 width=%22300%22 height=%22200%22/><text fill=%22%23999%22 font-family=%22Arial%22 font-size=%2214%22 text-anchor=%22middle%22 x=%22150%22 y=%22105%22>'+encodeURIComponent(array[i].name)+'</text></svg>';">
                 <h3>${array[i].name}</h3>
                 <p>$${array[i].price}</p>
                 <p class="product-category">${array[i].category} | ${array[i].country}</p>
