@@ -520,6 +520,113 @@ header {
     color: var(--footer-text);
 }
 
-@media (max-width: 700px) {
-    .footer .title { font-size: 32px; }
+@media (max-width: 768px) {
+    header {
+        flex-wrap: wrap;
+        padding: 15px 20px;
+        gap: 10px;
+    }
+
+    .enlaces {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .card-producto {
+        width: calc(50% - 20px);
+    }
+
+    .form-alta {
+        width: 85%;
+    }
+
+    .lista-producto {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px;
+    }
+
+    .lista-producto p {
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .admin-filters {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .filter-row {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        flex-direction: column;
+        align-items: center;
+        padding: 12px 15px;
+    }
+
+    .logo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .enlaces {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .enlaces a {
+        font-size: 0.9rem;
+    }
+
+    .user-info {
+        flex-direction: column;
+        gap: 6px;
+        font-size: 0.85rem;
+    }
+
+    .card-producto {
+        width: 100%;
+    }
+
+    .card-producto img {
+        width: 100px;
+        height: 90px;
+    }
+
+    .form-alta {
+        width: 95%;
+    }
+
+    .imagen-opciones {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .lista-producto {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    #contenedor-productos {
+        padding: 10px;
+        gap: 15px;
+    }
+
+    .admin-excel-btn {
+        display: block;
+        text-align: center;
+    }
+
+    .footer .title {
+        font-size: 28px;
+    }
 }
