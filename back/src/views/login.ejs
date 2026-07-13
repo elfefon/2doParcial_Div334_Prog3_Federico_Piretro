@@ -2,28 +2,8 @@
 
 <h4 class="texto-login"><%= about %></h4>
 
-<!-- ====================================================
-    Enviando formularios de manera nativa con HTML
-=========================================================
-
-en action="" mandamos la url del endpoint /login
-
-en method="" determinamos si enviamos con GET o con POST la informacion
-
-Gracias al middleware
-
-    app.use(express.urlencoded({
-        extended: true
-    }));
-
-Nuestro endpoint recibira esta informacion (No JSON) como objetos JS
-Es decir, el middleware parseara automaticamente el tipo de info que envia el <form>
-
--->
-
 <form id="loginForm" class="form-alta" action="/login" method="POST">
 
-    <!-- TO DO, introducir campos REGEX para validar los datos que enviamos -->
     <label for="emailUser">Email</label>
     <input type="email" name="email" id="emailUser" value="johnny@melavo.com" required>
 
@@ -35,68 +15,8 @@ Es decir, el middleware parseara automaticamente el tipo de info que envia el <f
     </div>
 </form>
 
-<p class="toggle-form">
-    <a href="#" id="showRegister">¿No tenés cuenta? Registrate</a>
-</p>
-
-<!-- Formulario de registro -->
-<form id="registerForm" class="form-alta" action="/login/register" method="POST" style="display: none;">
-
-    <label for="nameUser">Nombre</label>
-    <input type="text" name="name" id="nameUser" required>
-
-    <label for="emailRegUser">Email</label>
-    <input type="email" name="email" id="emailRegUser" required>
-
-    <label for="passwordRegUser">Contraseña</label>
-    <input type="password" name="password" id="passwordRegUser" required>
-
-    <label for="confirmPasswordUser">Repetir contraseña</label>
-    <input type="password" name="confirm_password" id="confirmPasswordUser" required>
-
-    <div>
-        <input type="submit" value="Crear cuenta">
-    </div>
-</form>
-
-<p class="toggle-form">
-    <a href="#" id="showLogin" style="display: none;">Ya tengo cuenta, iniciar sesión</a>
-</p>
-
-
-<!-- Mostramos posible mensaje de error del endpoint -->
 <% if(typeof error !== "undefined") { %> 
-
-        <p class="mensaje mensaje-error"><%= error %></p>
-
+    <p class="mensaje mensaje-error"><%= error %></p>
 <% } %>
 
-<script>
-    document.getElementById("showRegister").addEventListener("click", (e) => {
-        e.preventDefault();
-        document.getElementById("loginForm").style.display = "none";
-        document.getElementById("registerForm").style.display = "block";
-        document.getElementById("showRegister").style.display = "none";
-        document.getElementById("showLogin").style.display = "inline";
-    });
-
-    document.getElementById("showLogin").addEventListener("click", (e) => {
-        e.preventDefault();
-        document.getElementById("loginForm").style.display = "block";
-        document.getElementById("registerForm").style.display = "none";
-        document.getElementById("showRegister").style.display = "inline";
-        document.getElementById("showLogin").style.display = "none";
-    });
-
-    // Si hay error y veniamos del registro, mostrar el form de registro
-    if(typeof showRegister !== "undefined" && showRegister) { 
-        document.getElementById("loginForm").style.display = "none";
-        document.getElementById("registerForm").style.display = "block";
-        document.getElementById("showRegister").style.display = "none";
-        document.getElementById("showLogin").style.display = "inline";
-    } 
-</script>
-
-
-<!-- Nuestro footer, a falta de completarlo solo contiene los cierres del body y el html -->
 <%- include("partials/footer.ejs") %>

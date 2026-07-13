@@ -137,3 +137,56 @@ postProductForm.addEventListener("submit", async event => {
         mostrarMensaje("error", "Error al procesar la solicitud");
     }
 });
+
+//////////////////
+// Formulario de crear usuario admin
+const postUserForm = document.getElementById("postUser-form");
+
+postUserForm.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());
+
+    if (!data.name || data.name.trim().length < 2) {
+        mostrarMensaje("error", "El nombre debe tener al menos 2 caracteres");
+        return;
+    }
+
+    if (!data.email || !data.email.includes("@")) {
+        mostrarMensaje("error", "Ingrese un email valido");
+        return;
+    }
+
+    if (!data.password || data.password.length < 6) {
+        mostrarMensaje("error", "La contraseña debe tener al menos 6 caracteres");
+        return;
+    }
+
+    if (data.password !== data.confirm_password) {
+        mostrarMensaje("error", "Las contraseñas no coinciden");
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:3000/login/api/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            mostrarMensaje("error", result.message);
+            return;
+        }
+
+        mostrarMensaje("exito", result.message);
+        postUserForm.reset();
+
+    } catch (error) {
+        console.error("Error al crear usuario: ", error);
+        mostrarMensaje("error", "Error al procesar la solicitud");
+    }
+});

@@ -3,7 +3,8 @@
 ============================*/
 
 import { Router } from "express";
-import { getAdminUser, loginView, registerUser } from "../controllers/auth.controllers.js";
+import { getAdminUser, loginView } from "../controllers/auth.controllers.js";
+import { createAdminUser } from "../controllers/user.controllers.js";
 
 const router = Router();
 
@@ -13,8 +14,8 @@ router.get("/", loginView);
 // Obtener usuarios admin
 router.post("/", getAdminUser);
 
-// Registrar nuevo usuario
-router.post("/register", registerUser);
+// API: Crear usuario admin (JSON)
+router.post("/api/register", createAdminUser);
 
 
 
