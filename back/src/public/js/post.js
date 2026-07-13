@@ -70,8 +70,16 @@ function mostrarMensaje(tipo, mensaje) {
 }
 
 
+let isSubmitting = false;
+
 postProductForm.addEventListener("submit", async event => {
     event.preventDefault();
+
+    if (isSubmitting) return;
+    isSubmitting = true;
+
+    const submitBtn = postProductForm.querySelector('input[type="submit"]');
+    submitBtn.disabled = true;
 
     const formData = new FormData(event.target);
     const tipoImagen = formData.get("imagenTipo");
@@ -98,6 +106,8 @@ postProductForm.addEventListener("submit", async event => {
             const errorImagen = validarImagen(file);
             if (errorImagen) {
                 mostrarMensaje("error", errorImagen);
+                isSubmitting = false;
+                submitBtn.disabled = false;
                 return;
             }
             formData.append("image", file);
@@ -111,6 +121,8 @@ postProductForm.addEventListener("submit", async event => {
     const errores = validarFormulario(data);
     if (errores.length > 0) {
         mostrarMensaje("error", errores.join("\n"));
+        isSubmitting = false;
+        submitBtn.disabled = false;
         return;
     }
 
@@ -126,16 +138,22 @@ postProductForm.addEventListener("submit", async event => {
 
         if (!response.ok) {
             mostrarMensaje("error", result.errores ? result.errores.join("\n") : result.message);
+            isSubmitting = false;
+            submitBtn.disabled = false;
             return;
         }
 
         console.log(result.message);
         mostrarMensaje("exito", result.message);
+        postProductForm.reset();
 
     } catch (error) {
         console.error("Error al enviar los datos: ", error);
         mostrarMensaje("error", "Error al procesar la solicitud");
     }
+
+    isSubmitting = false;
+    submitBtn.disabled = false;
 });
 
 //////////////////
